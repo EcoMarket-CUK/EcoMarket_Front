@@ -1,16 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import mockUpcomingAuctions from "../data/mockUpcomingAuctions";
 import SellingItem from "../components/SellingItem";
 
 function Inspection() {
+  const [inspectionData,setInspectionData]=useState(null);
 
   const navigate = useNavigate();
 
-
   const goBack = () => {
     navigate("/uploadlist");
+  };
+
+  useEffect(()=>{
+    fetchInspection();
+  },[])
+
+  const fetchInspection = async () => {
+    try {
+      const accessToken = Cookies.get("accessToken");
+      console.log(accessToken);
+
+      const response = await axios.get(`https://ecomarket-cuk.shop/screenings`, {
+        headers: {
+          "Content-Type": "*/*",
+          "Authorization": `Bearer ${accessToken}` // accessToken을 헤더에 추가
+        },
+      });
+    
+      console.log(response);
+      setInspectionData(response.data);
+      // dispatch(setAuctions(response.data)); // Redux에 데이터 저장
+    } catch (error) {
+      console.error("경매 데이터를 가져오는 중 오류 발생:", error);
+    }
   };
 
   return (
@@ -42,11 +66,13 @@ function Inspection() {
       </GuideGroup>
 
       <label className="sectionTitle">경매중인 내 상품</label>
-      <AuctionItemWrapper>
-        {mockUpcomingAuctions.map((auction) => (
-          <SellingItem auction={auction} />
-        ))}
-      </AuctionItemWrapper>
+      {inspectionData&&
+        <AuctionItemWrapper>
+          {inspectionData.map((auction) => (
+            <SellingItem auction={auction} />
+          ))}
+        </AuctionItemWrapper>
+      }
     </Container>
   );
 }
