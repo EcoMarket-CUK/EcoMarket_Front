@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import GetAddress from "../api/GetAddress";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 function Register() {
   // 각각의 input 상태를 관리하기 위한 state
@@ -21,10 +23,35 @@ function Register() {
   // 페이지 이동 함수
   const goToHome = () => {
     if (isFormComplete()) {
-      navigate("/");
+      fetchRegister().then(navigate("/"));
     }
   };
 
+  const fetchRegister = async () => {
+    try {
+      const accessToken = Cookies.get("accessToken");
+      console.log("access Token :",accessToken);
+    
+      const response = await axios.post(`https://ecomarket-cuk.shop/members/info`, {
+        body:{
+          "name":name,
+          "nickname":nickname,
+          "zipcode":zipcode,
+          "address":address
+        }
+      }, {
+        headers: {
+          "Content-Type": "*/*",
+          "Authorization": `Bearer ${accessToken}` // accessToken을 헤더에 추가
+        },
+      });
+    
+      console.log(response);
+      // dispatch(setAuctions(response.data)); // Redux에 데이터 저장
+    } catch (error) {
+      console.error("경매 데이터를 가져오는 중 오류 발생:", error);
+    }
+  };
   return (
     <Container>
       <TitleGroup>

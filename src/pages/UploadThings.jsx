@@ -12,6 +12,9 @@ function UploadThings() { // 상위 컴포넌트로 전달할 onSubmit prop
   const [startPrice, setStartPrice] = useState("");
   const [productPhotos, setProductPhotos] = useState([]); // 최대 3장까지 선택 가능
   const [productInfo, setProductInfo] = useState("");
+  const [startTime,setStartTime]=useState("");
+  const [endTime,setEndTime]=useState("");
+
 
   const navigate = useNavigate();
 
@@ -21,7 +24,9 @@ function UploadThings() { // 상위 컴포넌트로 전달할 onSubmit prop
       category &&
       startPrice &&
       productPhotos.length > 0 &&
-      productInfo
+      productInfo &&
+      startTime &&
+      endTime
     );
   };
 
@@ -43,9 +48,9 @@ function UploadThings() { // 상위 컴포넌트로 전달할 onSubmit prop
         productName,
         productDescription: productInfo,
         desiredStartPrice: parseInt(startPrice), // 숫자 형식으로 변환
-        startTime: "2024-11-01 12:00:00", // 고정된 값
-        endTime: "2024-11-01 12:00:00",   // 고정된 값
-        auctionCategory: "CLOTHING" // 선택된 카테고리 값, 기본값 "CLOTHING"
+        startTime: startTime, // 고정된 값
+        endTime: endTime,   // 고정된 값
+        auctionCategory: "CLOTHING" || category // 선택된 카테고리 값, 기본값 "CLOTHING"
       };
       console.log(dto);
       // 상위 컴포넌트로 dto와 image(=productPhotos) 전달
@@ -161,6 +166,23 @@ function UploadThings() { // 상위 컴포넌트로 전달할 onSubmit prop
         </InputGroup>
 
         <InputGroup>
+          <label>시작 시간</label>
+          <TimeInput
+            value={startTime}
+            onChange={(e)=>
+              setStartTime(e.target.value)
+            }
+          />
+
+          <label>끝나는 시간</label>
+          <TimeInput
+            value={endTime}
+            onChange={(e)=>
+              setEndTime(e.target.value)
+            }/>
+        </InputGroup>
+
+        <InputGroup>
           <label>상품 설명</label>
           <textarea
             placeholder="상품에 대한 부가 설명을 상세히 작성해주세요."
@@ -170,6 +192,23 @@ function UploadThings() { // 상위 컴포넌트로 전달할 onSubmit prop
           />
         </InputGroup>
       </Form>
+
+      <label>상품 등록 과정</label>
+        <GuideGroup>
+          <StepContainer>
+            <CircleWrapper>
+              <img src="url_to_image1" alt="상품 등록" />
+            </CircleWrapper>
+            <ArrowIcon>{">"}</ArrowIcon>
+            <CircleWrapper>
+              <img src="url_to_image2" alt="에코마켓 검수" />
+            </CircleWrapper>
+            <ArrowIcon>{">"}</ArrowIcon>
+            <CircleWrapper>
+              <img src="url_to_image3" alt="경매 시작" />
+            </CircleWrapper>
+          </StepContainer>
+        </GuideGroup>
 
       <SubmitButton
         className={isFormComplete() ? "active" : ""}
@@ -312,6 +351,18 @@ const PlusIcon = styled.span`
   font-size: 50px;
   color: black;
 `;
+
+const TimeInput = styled.input.attrs({type:'time'})`
+  padding:8px;
+  font-size:16px;
+  border : 1px solid black;
+  border-radius: 4px;
+  background-color:#f9f9f9;
+  &.focus {
+    border-color:#66afe9;
+    outline:none;
+  }
+`
 
 const GuideGroup = styled.div`
   width: 100%;
