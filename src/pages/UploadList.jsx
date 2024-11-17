@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import mockAuctionData from "../data/mockAuctionData"; // import mock auction data
 import mockUpcomingAuctions from "../data/mockUpcomingAuctions"; // import mock upcoming auctions
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import SellingItem from "../components/SellingItem";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 function UploadList() {
   const [onGoing,setOnGoing]=useState(null);
@@ -31,6 +33,7 @@ function UploadList() {
     try {
       const accessToken = Cookies.get("accessToken");
       console.log(accessToken);
+      console.log(stat);
 
       const response = await axios.get(`https://ecomarket-cuk.shop/screenings/member-auctions`, {
         body:{

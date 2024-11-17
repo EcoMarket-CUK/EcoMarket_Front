@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import mockUpcomingAuctions from "../data/mockUpcomingAuctions";
 import SellingItem from "../components/SellingItem";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 function Inspection() {
   const [inspectionData,setInspectionData]=useState(null);
