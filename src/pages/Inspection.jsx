@@ -32,7 +32,7 @@ function Inspection() {
       });
     
       console.log(response);
-      setInspectionData(response.data);
+      setInspectionData(response.data.result);
       // dispatch(setAuctions(response.data)); // Redux에 데이터 저장
     } catch (error) {
       console.error("경매 데이터를 가져오는 중 오류 발생:", error);

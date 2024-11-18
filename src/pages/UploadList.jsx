@@ -35,11 +35,7 @@ function UploadList() {
       console.log(accessToken);
       console.log(stat);
 
-      const response = await axios.get(`https://ecomarket-cuk.shop/screenings/member-auctions`, {
-        body:{
-          "status": stat
-        }
-      },{
+      const response = await axios.get(`https://ecomarket-cuk.shop/screenings/member-auctions?status=${stat}`, {
         headers: {
           "Content-Type": "*/*",
           "Authorization": `Bearer ${accessToken}` // accessToken을 헤더에 추가
@@ -48,14 +44,14 @@ function UploadList() {
     
       console.log(response);
       if (stat=="ENDED"){
-        setEnded(response.data);
+        setEnded(response.data.result);
       }
       else{
-        setOnGoing(response.data);
+        setOnGoing(response.data.result);
       }
       // dispatch(setAuctions(response.data)); // Redux에 데이터 저장
     } catch (error) {
-      console.error("경매 데이터를 가져오는 중 오류 발생:", error);
+      console.error(error);
     }
   };
 
