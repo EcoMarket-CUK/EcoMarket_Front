@@ -78,20 +78,34 @@
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    border: 1px solid #d3d3d3; /* 약간 흐린 경계선 */
+    border: 1px solid #d3d3d3;
     display: flex;
     justify-content: center;
     align-items: center;
     margin-left: auto;
     margin-bottom: 7px;
     margin-right: 4px;
-  }
-  
-  .refresh-icon {
+}
+
+.refresh-icon {
     width: 14px;
     height: 14px;
     object-fit: contain;
-  }
+}
+
+/* rotating 클래스가 있을 때만 회전 애니메이션 추가 */
+.rotating {
+    animation: rotate 0.7s linear infinite;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
   .first_line{
     display: flex;
     justify-content: space-between;

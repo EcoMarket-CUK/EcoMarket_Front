@@ -1,13 +1,20 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { screening } from "../api/screening";
+import instance from '../axiosConfig';
+import Cookies from "js-cookie";
+import axios from "axios";
 
-function UploadThings() {
+function UploadThings() { // 상위 컴포넌트로 전달할 onSubmit prop
   const [productName, setProductName] = useState("");
   const [category, setCategory] = useState("");
   const [startPrice, setStartPrice] = useState("");
   const [productPhotos, setProductPhotos] = useState([]); // 최대 3장까지 선택 가능
   const [productInfo, setProductInfo] = useState("");
+  const [startTime,setStartTime]=useState("");
+  const [endTime,setEndTime]=useState("");
+
 
   const navigate = useNavigate();
 
@@ -17,26 +24,69 @@ function UploadThings() {
       category &&
       startPrice &&
       productPhotos.length > 0 &&
-      productInfo
+      productInfo &&
+      startTime &&
+      endTime
     );
   };
 
   const handlePhotoChange = (e) => {
     const files = Array.from(e.target.files);
     if (files.length > 0 && productPhotos.length + files.length <= 3) {
-      const photoURLs = files.map((file) => URL.createObjectURL(file));
-      setProductPhotos([...productPhotos, ...photoURLs].slice(0, 3)); // 최대 3개까지만 저장
+      setProductPhotos([...productPhotos, ...files].slice(0, 3)); // 최대 3개까지만 저장
     }
   };
 
   const goBack = () => {
     navigate("/uploadlist");
   };
+
   const goToUpload = () => {
     if (isFormComplete()) {
-      navigate("/uploadlist");
+      // 사진을 제외한 데이터를 합쳐 dto 객체 생성
+      const dto = {
+        productName,
+        productDescription: productInfo,
+        desiredStartPrice: parseInt(startPrice), // 숫자 형식으로 변환
+        startTime: startTime, // 고정된 값
+        endTime: endTime,   // 고정된 값
+        auctionCategory: "CLOTHING" || category // 선택된 카테고리 값, 기본값 "CLOTHING"
+      };
+      console.log(dto);
+      // 상위 컴포넌트로 dto와 image(=productPhotos) 전달
+      fetchUpload(dto, productPhotos);
     }
   };
+
+  const fetchUpload = async (dto, productPhotos) => {
+    try {
+      const accessToken = Cookies.get("accessToken");
+      console.log(accessToken);
+      const formData = new FormData();
+      
+      // DTO 객체를 JSON 문자열로 변환하여 FormData에 추가
+      formData.append("screeningDto", new Blob([JSON.stringify(dto)], { type: "application/json" }));
+    
+      // 이미지 파일을 FormData에 추가
+      productPhotos.forEach((photo) => {
+        formData.append("images", photo);
+      });
+    
+      const response = await axios.post(`https://ecomarket-cuk.shop/screenings`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "Authorization": `Bearer ${accessToken}` // accessToken을 헤더에 추가
+        },
+      });
+    
+      console.log(response);
+      // dispatch(setAuctions(response.data)); // Redux에 데이터 저장
+    } catch (error) {
+      console.error("경매 데이터를 가져오는 중 오류 발생:", error);
+    }
+  };
+  
+  
 
   return (
     <Container>
@@ -97,14 +147,14 @@ function UploadThings() {
               onChange={handlePhotoChange}
               style={{ display: "none" }}
               id="product-photo"
-              multiple // 여러 사진 선택 가능하게 설정
+              multiple
             />
             <PhotoLabel htmlFor="product-photo">
               {productPhotos.length > 0 ? (
                 productPhotos.map((photo, index) => (
                   <PhotoPreview
                     key={index}
-                    src={photo}
+                    src={URL.createObjectURL(photo)} // 미리보기를 위한 URL 생성
                     alt={`Selected product ${index + 1}`}
                   />
                 ))
@@ -115,6 +165,20 @@ function UploadThings() {
           </PhotoContainer>
         </InputGroup>
 
+        <TimeInputGroup>
+          <StyledLabel>시작 시간</StyledLabel>
+          <TimeInput
+            value={startTime}
+            onChange={(e) => setStartTime(e.target.value)}
+          />
+
+          <StyledLabel>끝나는 시간</StyledLabel>
+          <TimeInput
+            value={endTime}
+            onChange={(e) => setEndTime(e.target.value)}
+          />
+        </TimeInputGroup>
+
         <InputGroup>
           <label>상품 설명</label>
           <textarea
@@ -124,28 +188,26 @@ function UploadThings() {
             className={productInfo ? "filled" : ""}
           />
         </InputGroup>
-
-        <label>상품 검수 과정</label>
-        <GuideGroup>
-          <StepContainer>
-            <CircleWrapper>
-              <img src="/assets/etcpage/money.svg" alt="시작가 검토" />
-            </CircleWrapper>
-            <ArrowIcon>
-              <img src="/assets/etcpage/Vector.svg" alt="" />
-            </ArrowIcon>
-            <CircleWrapper>
-              <img src="/assets/etcpage/eye.svg" alt="상품 검토" />
-            </CircleWrapper>
-            <ArrowIcon>
-              <img src="/assets/etcpage/Vector.svg" alt="" />
-            </ArrowIcon>
-            <CircleWrapper>
-              <img src="/assets/etcpage/thumb.svg" alt="검수 완료" />
-            </CircleWrapper>
-          </StepContainer>
-        </GuideGroup>
       </Form>
+      <StyledLabel className="guide">상품 등록 과정</StyledLabel>
+      <GuideGroup>
+        <StepContainer>
+          <StepWrapper>
+            <CircleWrapper>💰</CircleWrapper>
+            <StepDescription>시작가 검토</StepDescription>
+          </StepWrapper>
+          <ArrowIcon>{">"}</ArrowIcon>
+          <StepWrapper>
+            <CircleWrapper>🧐</CircleWrapper>
+            <StepDescription>상품 검토</StepDescription>
+          </StepWrapper>
+          <ArrowIcon>{">"}</ArrowIcon>
+          <StepWrapper>
+            <CircleWrapper>👍</CircleWrapper>
+            <StepDescription>검수 완료</StepDescription>
+          </StepWrapper>
+        </StepContainer>
+    </GuideGroup>
 
       <SubmitButton
         className={isFormComplete() ? "active" : ""}
@@ -159,6 +221,7 @@ function UploadThings() {
 }
 
 export default UploadThings;
+
 
 // styled-components
 const Container = styled.div`
@@ -255,6 +318,28 @@ const InputGroup = styled.div`
   }
 `;
 
+const StyledLabel = styled.label`
+  font-size: 15px;
+  font-weight: bold;
+  width: 100%; /* GuideGroup과 일치하는 너비 */
+  
+  &.guide {
+    margin: 8px 0;
+    text-align: left;
+    display: block; /* 다른 요소들과의 정렬 문제를 해결 */
+  }
+`;
+
+// 시간 입력 그룹 스타일 추가
+const TimeInputGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* label과 input 간의 간격 설정 */
+  input{
+    border: 1px solid #e0e0e0;
+  }
+`;
+
 const PhotoContainer = styled.div`
   display: flex;
   gap: 10px;
@@ -288,25 +373,45 @@ const PlusIcon = styled.span`
   color: black;
 `;
 
+const TimeInput = styled.input.attrs({type:'time'})`
+  padding:8px;
+  font-size:16px;
+  border : 1px solid black;
+  border-radius: 4px;
+  background-color:#f9f9f9;
+  &.focus {
+    border-color:#66afe9;
+    outline:none;
+  }
+`
+
 const GuideGroup = styled.div`
   width: 100%;
   max-width: 330px;
-  height: 146px;
+  height: auto;
   background-color: lightgray;
   border-radius: 10px;
   display: flex;
   align-items: center;
+  justify-content: space-around;
   padding: 20px;
   margin: 0 auto;
   box-sizing: border-box;
+  flex-direction: column;
 `;
 
 const StepContainer = styled.div`
   width: 100%;
   display: flex;
-  gap: 10px;
   justify-content: space-around;
   align-items: center;
+`;
+
+const StepWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
 `;
 
 const CircleWrapper = styled.div`
@@ -317,19 +422,19 @@ const CircleWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
   background-color: white;
+  font-size: 29px;
+`;
 
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+const StepDescription = styled.span`
+  font-size: 15px;
+  color: black;
 `;
 
 const ArrowIcon = styled.span`
   font-size: 30px;
   color: black;
+  margin-bottom:30px;
 `;
 
 const SubmitButton = styled.button`

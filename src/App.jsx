@@ -1,6 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Provider } from 'react-redux';
+import store from './redux/store';
 import "./App.css";
+// src/App.js 또는 src/index.js
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import Register from "./pages/Register";
 import Auction from "./pages/Auction";
 import Profile from "./pages/Profile";
@@ -9,29 +14,36 @@ import LoginPage from "./pages/LoginPage";
 import GlobalStyle from "./css/GlobalStyle";
 import UploadThings from "./pages/UploadThings";
 import UploadList from "./pages/UploadList";
+import { TotalCategory } from "./pages/TotalCategory";
+import ProductDetail from "./pages/ProductDetail";
 import Inspection from "./pages/Inspection";
 import Search from "./pages/Search";
-
+import UpcomingDetail from "./pages/UpcomingDetail";
+import DoneDetail from "./pages/DoneDetail";
 function App() {
   return (
-    <>
+    <Provider store={store}>
       <GlobalStyle />
       <Router>
         <div className="App">
-          <Navbar /> {/* 항상 하단에 고정되는 Navbar */}
+          <Navbar /> {/* Navbar 항상 하단에 고정 */}
           <Routes>
+            <Route path="/" element={<Auction />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/" element={<Auction />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/uploadlist" element={<UploadList />} />
             <Route path="/upload" element={<UploadThings />} />
+            <Route path="/category-page" element={<TotalCategory />} />
+            <Route path="/product/:productId" element={<ProductDetail />} />
+            <Route path="/upcoming/:productId" element={<UpcomingDetail />} />
+            <Route path="/done/:productId" element={<DoneDetail/>} />
             <Route path="/inspection" element={<Inspection />} />
             <Route path="/search" element={<Search />} />
           </Routes>
         </div>
       </Router>
-    </>
+    </Provider>
   );
 }
 

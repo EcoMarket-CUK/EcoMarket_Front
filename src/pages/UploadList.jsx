@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import mockAuctionData from "../data/mockAuctionData"; // import mock auction data
 import mockUpcomingAuctions from "../data/mockUpcomingAuctions"; // import mock upcoming auctions
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import SellingItem from "../components/SellingItem";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 function UploadList() {
-  const [productName, setProductName] = useState("");
-  const [category, setCategory] = useState("");
-  const [startPrice, setStartPrice] = useState("");
-  const [productPhoto, setProductPhoto] = useState(null);
-  const [productInfo, setProductInfo] = useState("");
+  const [onGoing,setOnGoing]=useState(null);
+  const [ended,setEnded]=useState(null);
 
   const navigate = useNavigate();
 
@@ -25,14 +24,34 @@ function UploadList() {
     navigate("/inspection");
   };
 
-  const isFormComplete = () => {
-    return productName && category && startPrice && productPhoto && productInfo;
-  };
+  useEffect(()=>{
+    fetchMAuctions("ONGOING");
+    fetchMAuctions("ENDED")
+  },[])
 
-  const handlePhotoChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setProductPhoto(URL.createObjectURL(file));
+  const fetchMAuctions = async (stat) => {
+    try {
+      const accessToken = Cookies.get("accessToken");
+      console.log(accessToken);
+      console.log(stat);
+
+      const response = await axios.get(`https://ecomarket-cuk.shop/screenings/member-auctions?status=${stat}`, {
+        headers: {
+          "Content-Type": "*/*",
+          "Authorization": `Bearer ${accessToken}` // accessToken을 헤더에 추가
+        },
+      });
+    
+      console.log(response);
+      if (stat=="ENDED"){
+        setEnded(response.data.result);
+      }
+      else{
+        setOnGoing(response.data.result);
+      }
+      // dispatch(setAuctions(response.data)); // Redux에 데이터 저장
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -67,18 +86,23 @@ function UploadList() {
       </SubmitButton>
 
       <label className="sectionTitle">경매중인 내 상품</label>
-      <AuctionItemWrapper>
-        {mockUpcomingAuctions.map((auction) => (
+      {onGoing&&
+        <AuctionItemWrapper>
+        {onGoing.map((auction) => (
           <SellingItem auction={auction} />
         ))}
       </AuctionItemWrapper>
+      }
 
       <label className="sectionTitle two">경매 완료된 내 상품</label>
-      <AuctionItemWrapper>
-        {mockUpcomingAuctions.map((auction) => (
+      {ended&&
+        <AuctionItemWrapper>
+        {ended.map((auction) => (
           <SellingItem auction={auction} />
         ))}
       </AuctionItemWrapper>
+      }
+      
 
       <CircleButton onClick={goToUpload}>+</CircleButton>
     </Container>

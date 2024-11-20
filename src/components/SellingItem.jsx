@@ -1,10 +1,15 @@
 // SellingItem.js
 import React from "react";
 import "../css/components/SellingItem.css"; // 새로운 CSS 파일 import
+import { useNavigate } from "react-router-dom";
 
 const SellingItem = ({ auction }) => {
+  const navigate = useNavigate();
+  const goToDoneDetail=()=>{
+    navigate(`/done/${auction.id}`);
+  }
   return (
-    <div className="auction-item">
+    <div className="auction-item" onClick={goToDoneDetail}>
       <img src={auction.img} alt={auction.title} className="auction-item-img" />
       <div className="auction-item-details">
         <div className="first_line">

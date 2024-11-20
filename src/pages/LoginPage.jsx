@@ -11,10 +11,10 @@ function LoginPage() {
   const navigate = useNavigate();
 
   const goToRegister = () => {
-    const loginUrl = SocialLogin();
-    window.open(loginUrl).then(navigate("/register"));
+    window.location.href =
+      "http://15.165.136.72:8080/oauth2/kakao";
+    // alert("서비스 종료 ㅠㅠㅠㅠ");
   };
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setFadeOut(true); // fade-out 시작

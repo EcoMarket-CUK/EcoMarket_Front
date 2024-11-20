@@ -1,0 +1,20 @@
+.topbar-container {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-top: 30px;
+  }
+  
+  .topbar-icon {
+    width: 10px;
+    height: 17px;
+    margin-right: 8px;
+  }
+  
+  .topbar-text {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+    margin-left: 5px;
+  }
+  
