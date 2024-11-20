@@ -9,7 +9,7 @@ import LoginPage from "./pages/LoginPage";
 import GlobalStyle from "./css/GlobalStyle";
 import UploadThings from "./pages/UploadThings";
 import UploadList from "./pages/UploadList";
-import Inspection from "./pages/ Inspection";
+import Inspection from "./pages/Inspection";
 import Search from "./pages/Search";
 
 function App() {
