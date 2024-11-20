@@ -66,18 +66,18 @@ function UploadList() {
       <GuideGroup>
         <StepContainer>
           <StepWrapper>
-            <CircleWrapper>💰</CircleWrapper>
-            <StepDescription>시작가 검토</StepDescription>
+            <CircleWrapper>🎁</CircleWrapper>
+            <StepDescription>상품 등록</StepDescription>
           </StepWrapper>
           <ArrowIcon>{">"}</ArrowIcon>
           <StepWrapper>
-            <CircleWrapper>🧐</CircleWrapper>
-            <StepDescription>상품 검토</StepDescription>
+            <CircleWrapper>✅</CircleWrapper>
+            <StepDescription>에코마켓 검수</StepDescription>
           </StepWrapper>
           <ArrowIcon>{">"}</ArrowIcon>
           <StepWrapper>
-            <CircleWrapper>👍</CircleWrapper>
-            <StepDescription>검수 완료</StepDescription>
+            <CircleWrapper>💵</CircleWrapper>
+            <StepDescription>경매 시작</StepDescription>
           </StepWrapper>
         </StepContainer>
     </GuideGroup>
@@ -140,9 +140,9 @@ const Container = styled.div`
 const TitleGroup = styled.div`
   text-align: left;
   width: 100%;
-  margin-bottom: 24px;
   display: flex;
   justify-content: bottom;
+  margin-bottom:10px;
   img {
     size: 25px;
     transform: scaleX(-1);
@@ -166,7 +166,7 @@ const TitleGroup = styled.div`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 2px;
   width: 100%;
   label {
     font-size: 15px;
@@ -180,7 +180,7 @@ const StyledLabel = styled.label`
   width: 100%; /* GuideGroup과 일치하는 너비 */
   
   &.guide {
-    margin: 8px 0;
+    margin-bottom:8px;
     text-align: left;
     display: block; /* 다른 요소들과의 정렬 문제를 해결 */
   }

@@ -87,7 +87,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 84px 30px 20px 30px;
+  padding: 72px 30px 20px 30px;
   font-family: "Pretendard", sans-serif;
   padding-bottom: 180px; /* 하단에 추가 공간을 확보하여 스크롤 가능하도록 설정 */
   .sectionTitle {
@@ -193,4 +193,10 @@ const ArrowIcon = styled.span`
   font-size: 30px;
   color: black;
   margin-bottom:30px;
+`;
+
+const AuctionItemWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
 `;
