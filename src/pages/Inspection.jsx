@@ -46,26 +46,25 @@ function Inspection() {
         <h1>상품 등록</h1>
       </TitleGroup>
 
-      <label>상품 검수 과정</label>
+      <StyledLabel className="guide">상품 등록 과정</StyledLabel>
       <GuideGroup>
         <StepContainer>
-          <CircleWrapper>
-            <img src="/assets/etcpage/money.svg" alt="시작가 검토" />
-          </CircleWrapper>
-          <ArrowIcon>
-            <img src="/assets/etcpage/Vector.svg" alt="" />
-          </ArrowIcon>
-          <CircleWrapper>
-            <img src="/assets/etcpage/eye.svg" alt="상품 검토" />
-          </CircleWrapper>
-          <ArrowIcon>
-            <img src="/assets/etcpage/Vector.svg" alt="" />
-          </ArrowIcon>
-          <CircleWrapper>
-            <img src="/assets/etcpage/thumb.svg" alt="검수 완료" />
-          </CircleWrapper>
+          <StepWrapper>
+            <CircleWrapper>💰</CircleWrapper>
+            <StepDescription>시작가 검토</StepDescription>
+          </StepWrapper>
+          <ArrowIcon>{">"}</ArrowIcon>
+          <StepWrapper>
+            <CircleWrapper>🧐</CircleWrapper>
+            <StepDescription>상품 검토</StepDescription>
+          </StepWrapper>
+          <ArrowIcon>{">"}</ArrowIcon>
+          <StepWrapper>
+            <CircleWrapper>👍</CircleWrapper>
+            <StepDescription>검수 완료</StepDescription>
+          </StepWrapper>
         </StepContainer>
-      </GuideGroup>
+    </GuideGroup>
 
       <label className="sectionTitle">경매중인 내 상품</label>
       {inspectionData&&
@@ -88,7 +87,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 84px 30px 20px 30px;
+  padding: 72px 30px 20px 30px;
   font-family: "Pretendard", sans-serif;
   padding-bottom: 180px; /* 하단에 추가 공간을 확보하여 스크롤 가능하도록 설정 */
   .sectionTitle {
@@ -132,25 +131,45 @@ const TitleGroup = styled.div`
   }
 `;
 
+const StyledLabel = styled.label`
+  font-size: 15px;
+  font-weight: bold;
+  width: 100%; /* GuideGroup과 일치하는 너비 */
+  
+  &.guide {
+    margin: 8px 0;
+    text-align: left;
+    display: block; /* 다른 요소들과의 정렬 문제를 해결 */
+  }
+`;
+
 const GuideGroup = styled.div`
   width: 100%;
   max-width: 330px;
-  height: 146px;
+  height: auto;
   background-color: lightgray;
   border-radius: 10px;
   display: flex;
   align-items: center;
+  justify-content: space-around;
   padding: 20px;
   margin: 0 auto;
   box-sizing: border-box;
+  flex-direction: column;
 `;
 
 const StepContainer = styled.div`
   width: 100%;
   display: flex;
-  gap: 10px;
   justify-content: space-around;
   align-items: center;
+`;
+
+const StepWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
 `;
 
 const CircleWrapper = styled.div`
@@ -161,23 +180,23 @@ const CircleWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
   background-color: white;
+  font-size: 29px;
+`;
 
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+const StepDescription = styled.span`
+  font-size: 15px;
+  color: black;
+`;
+
+const ArrowIcon = styled.span`
+  font-size: 30px;
+  color: black;
+  margin-bottom:30px;
 `;
 
 const AuctionItemWrapper = styled.div`
   display: flex;
   width: 100%;
   flex-direction: column;
-`;
-
-const ArrowIcon = styled.span`
-  font-size: 30px;
-  color: black;
 `;
