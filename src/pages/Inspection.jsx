@@ -43,7 +43,7 @@ function Inspection() {
     <Container>
       <TitleGroup>
         <img src="/assets/etcpage/Vector.svg" alt="" onClick={goBack} />
-        <h1>상품 등록</h1>
+        <h1>등록 중인 상품</h1>
       </TitleGroup>
 
       <StyledLabel className="guide">상품 등록 과정</StyledLabel>
@@ -53,12 +53,12 @@ function Inspection() {
             <CircleWrapper>💰</CircleWrapper>
             <StepDescription>시작가 검토</StepDescription>
           </StepWrapper>
-          <ArrowIcon>{">"}</ArrowIcon>
+          <ArrowIcon><img src="/assets/guideArrow.svg" alt="가이드 화살표"/></ArrowIcon>
           <StepWrapper>
             <CircleWrapper>🧐</CircleWrapper>
             <StepDescription>상품 검토</StepDescription>
           </StepWrapper>
-          <ArrowIcon>{">"}</ArrowIcon>
+          <ArrowIcon><img src="/assets/guideArrow.svg" alt="가이드 화살표"/></ArrowIcon>
           <StepWrapper>
             <CircleWrapper>👍</CircleWrapper>
             <StepDescription>검수 완료</StepDescription>
@@ -87,7 +87,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 72px 30px 20px 30px;
+  padding: 40px 30px 20px 30px;
   font-family: "Pretendard", sans-serif;
   padding-bottom: 180px; /* 하단에 추가 공간을 확보하여 스크롤 가능하도록 설정 */
   .sectionTitle {
@@ -108,21 +108,21 @@ const TitleGroup = styled.div`
   width: 100%;
   margin-bottom: 30px;
   display: flex;
-  justify-content: bottom;
   img {
     width: 10px;
     height: 16px;
     display: inline;
-    margin-top: 7px;
+    margin-top: 5px;
     margin-right: 10px;
     transform: scaleX(-1);
   }
 
   h1 {
-    display: inline;
+    display: flex;
     font-size: 25px;
     font-weight: var(--weight-semi-bold);
     margin-bottom: 5px;
+    justify-content:center;
   }
 
   p {
