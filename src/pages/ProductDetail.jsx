@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Navbar from '../components/Detail/Navbar.jsx';
 import ImageSlider from '../components/Detail/ImageSlider';
 import ProductInfo from '../components/Detail/ProductInfo';
@@ -6,73 +9,114 @@ import SellerInfo from '../components/Detail/SellerInfo';
 import BidInfo from '../components/Detail/BidInfo';
 import TransactionChart from '../components/Detail/TransactionChart';
 import "../css/pages/ProductDetail.css";
-
-
-const mockProductData = {
-  productId: 1,
-  productName: "모나리자",
-  productDescription: "레오나르도 다빈치의 대표적인 작품으로, 세계에서 가장 유명한 초상화입니다.",
-  currentPrice: 50000000,
-  currentBidders: 1234,
-  auctionCategory: "그림",
-  imageUrls: [
-    "/assets/picture1.svg",
-    "/assets/picture2.svg",
-    "/assets/picture3.svg"
-  ],
-  sellerName: "홍길동",
-  sellerImageUrl: "/assets/picture1.svg",
-  auctionEndTime: "2023-12-31 18:00",
-  transactionVolume: [
-    { date: "10/20", volume: 10 },
-    { date: "10/21", volume: 18 },
-    { date: "10/22", volume: 13 },
-    { date: "10/23", volume: 21 },
-    { date: "10/24", volume: 8 },
-    { date: "10/25", volume: 17 },
-    { date: "10/26", volume: 5 },
-    { date: "10/27", volume: 15 },
-    { date: "10/28", volume: 9 },
-  ],
-  bidHistory: [
-    { date: "10/28", time: "18:00", amount: 30000000 },
-    { date: "10/28", time: "18:01", amount: 33000000 },
-    { date: "10/28", time: "18:02", amount: 36300000 },
-  ]
-};
+import AuctionModal from '../components/Modal/AuctionModal.jsx';
+import Cookies from 'js-cookie';// 매핑 함수 가져오기
+import { getCategoryDisplayName } from '../utils/categoryMapping.js';
+const apiClient = axios.create({
+  baseURL: 'https://ecomarket-cuk.shop', // 기본 API URL 설정
+});
 
 const ProductDetail = () => {
-  const product = mockProductData;
+  const { productId } = useParams(); // URL의 params에서 productId 가져오기
+  const navigate = useNavigate();
+  const [product, setProduct] = useState(null);
   const [isRotating, setIsRotating] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const fetchProductDetails = async () => {
+    try {
+      const accessToken = Cookies.get('accessToken');
+      if (!accessToken) {
+        console.error("Missing accessToken. Redirecting to login.");
+        navigate('/login');
+        return;
+      }
+
+      const response = await apiClient.get(`/products/ongoing/${productId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      console.log(response);
+
+      const memberId = response.data.result.memberId;
+      if (memberId) {
+        Cookies.set('memberId', memberId, { expires: 1 });
+      }
+      setProduct(response.data.result);
+    } catch (error) {
+      console.error('Error fetching product details:', error);
+    } 
+  };
+
+  useEffect(() => {
+    fetchProductDetails();
+  }, [productId, navigate]);
 
   const handleRefreshClick = () => {
     setIsRotating(true);
+    fetchProductDetails(); // 데이터 다시 요청
     setTimeout(() => {
       setIsRotating(false);
     }, 700); // 0.7초 후에 애니메이션을 중지
   };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  if (!product) {
+    return <div>Loading...</div>;
+  }
+
+  const topBidPrice = product.top3BidDatePrice?.[0]?.bidPrice || 0;
+  const bidHistory = product.top3BidDatePrice?.map(bid => ({
+    date: bid.bidDate.split(' ')[0],
+    time: bid.bidDate.split(' ')[1],
+    amount: bid.bidPrice,
+  })) || [];
+
   return (
     <div className="detail-product-detail-container">
-      <Navbar category={product.auctionCategory} />
-      <ImageSlider imageUrls={product.imageUrls} productName={product.productName} />
-      <ProductInfo productName={product.productName} productDescription={product.productDescription} />
-      <SellerInfo sellerName={product.sellerName} sellerImageUrl={product.sellerImageUrl} auctionEndTime={product.auctionEndTime} />
-      <div className="margingray"></div>
-      <BidInfo currentPrice={product.currentPrice} currentBidders={product.currentBidders} />
-      <TransactionChart transactionVolume={product.transactionVolume} bidHistory={product.bidHistory} />
-      <div className="refresh-status">
-        <span className='refresh-text'>실시간 변경 새로고침</span>
-        <div className="img-box" onClick={handleRefreshClick}>
+    <Navbar category={getCategoryDisplayName(product.auctionCategory)} />
+    {/* <ImageSlider imageUrls={product.images} productName={product.productName} /> */}
+    <ImageSlider 
+      imageUrls={
+        product.images && product.images.length > 0 
+          ? product.images 
+          : ["/assets/picture1.svg", "/assets/picture2.svg", "/assets/picture3.svg"] // 기본 이미지
+      } 
+      productName={product.productName} 
+    />
+    <ProductInfo productName={product.productName} productDescription={product.productDescription} />
+    <SellerInfo
+      sellerName={product.sellerNickname}
+      sellerImageUrl="/assets/picture1.svg"
+      auctionEndTime={product.endTime}
+    />
+    <div className="margingray"></div>
+    <BidInfo currentPrice={topBidPrice} currentBidders={product.numOfBidders} />
+    <TransactionChart
+      transactionVolume={product.bidVolumeByDate || []}
+      bidHistory={bidHistory}
+    />
+    <div className="refresh-status">
+      <span className="refresh-text">실시간 변경 새로고침</span>
+      <div className="img-box" onClick={handleRefreshClick}>
         <img
-            src="/assets/refresh.svg"
-            alt="refresh"
-            className={`refresh-icon ${isRotating ? 'rotating' : ''}`} // 조건부 클래스 추가
-          />
-        </div>
+          src="/assets/refresh.svg"
+          alt="refresh"
+          className={`refresh-icon ${isRotating ? 'rotating' : ''}`}
+        />
       </div>
-      <button className="fixed-button">경매입장하기</button>
-      <div className="show"></div>
     </div>
+    <button className="fixed-button" onClick={handleOpenModal}>경매입장하기</button>
+    {isModalOpen && <AuctionModal onClose={handleCloseModal} productId={product.productId} />}
+    <div className="show"></div>
+  </div>
   );
 };
 

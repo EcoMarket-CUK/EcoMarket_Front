@@ -12,7 +12,7 @@ function LoginPage() {
 
   const goToRegister = () => {
     window.location.href =
-      "http://15.165.136.72:8080/oauth2/kakao";
+      "https://ecomarket-cuk.shop/oauth2/kakao";
     // alert("서비스 종료 ㅠㅠㅠㅠ");
   };
   useEffect(() => {

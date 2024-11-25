@@ -1,0 +1,21 @@
+.greater-sign {
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 1px;
+  }
+
+.view-all-text{
+    font-size: 13px;
+}
+.auction-item {
+    width: 95%;
+    display: flex;
+    background-color: #ffffff;
+    padding: 0px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+.recent-auctions{
+    width: 100%;
+}

@@ -18,9 +18,12 @@ import { TotalCategory } from "./pages/TotalCategory";
 import ProductDetail from "./pages/ProductDetail";
 import Inspection from "./pages/Inspection";
 import Search from "./pages/Search";
+import AuctionProduct from "./pages/AuctionProduct"
 import UpcomingDetail from "./pages/UpcomingDetail";
 import DoneDetail from "./pages/DoneDetail";
 import Admin from "./pages/Admin";
+import { Previous } from "./pages/Previous";
+import { SearchBid } from "./pages/SearchBid";
 function App() {
   return (
     <Provider store={store}>
@@ -33,12 +36,20 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
+            
+            <Route path="/previous-bids" element={<Previous />} />
+            
+            <Route path="/search-bids" element={<SearchBid />} />
             <Route path="/uploadlist" element={<UploadList />} />
             <Route path="/upload" element={<UploadThings />} />
             <Route path="/category-page" element={<TotalCategory />} />
             <Route path="/product/:productId" element={<ProductDetail />} />
+
+            <Route path="/auctionproduct/:auctionId" element={<AuctionProduct />} />
+
             <Route path="/upcoming/:productId" element={<UpcomingDetail />} />
             <Route path="/done/:productId" element={<DoneDetail/>} />
+
             <Route path="/inspection" element={<Inspection />} />
             <Route path="/search" element={<Search />} />
             <Route path="/admin" element={<Admin />} />

@@ -165,3 +165,7 @@
   line-height: 1.5; /* 제목의 줄 간격을 높이에 맞게 조정 */
 
 }
+.selected {
+  border: 1px solid #1feb58; /* 선택된 항목의 테두리 색상 */
+  background-color: #dfeee36c; /* 선택된 항목의 배경색 */
+}
