@@ -4,21 +4,32 @@ import { useNavigate } from "react-router-dom";
 import mockUpcomingAuctions from "../data/mockUpcomingAuctions";
 import SellingItem from "../components/SellingItem";
 import "../css/components/SearchContainer.css";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 function Search() {
-  const [productName, setProductName] = useState("");
-  const [category, setCategory] = useState("");
-  const [startPrice, setStartPrice] = useState("");
-  const [productPhotos, setProductPhotos] = useState([]); // 최대 3장까지 선택 가능
-  const [productInfo, setProductInfo] = useState("");
+  const [keyword, setKeyword] = useState("");
+  const [searchData,setSearchData] = useState([]);
 
   const navigate = useNavigate();
 
-  const handlePhotoChange = (e) => {
-    const files = Array.from(e.target.files);
-    if (files.length > 0 && productPhotos.length + files.length <= 3) {
-      const photoURLs = files.map((file) => URL.createObjectURL(file));
-      setProductPhotos([...productPhotos, ...photoURLs].slice(0, 3)); // 최대 3개까지만 저장
+  const fetchSearch = async () => {
+    try {
+      const accessToken = Cookies.get("accessToken");
+      console.log(accessToken);
+    
+      const response = await axios.get(`https://ecomarket-cuk.shop/auctions/search?keyword=${keyword}`, {
+        headers: {
+          "Content-Type": "*/*",
+          "Authorization": `Bearer ${accessToken}` // accessToken을 헤더에 추가
+        },
+      });
+    
+      console.log(response);
+      setSearchData(response.data.result);
+      // dispatch(setAuctions(response.data)); // Redux에 데이터 저장
+    } catch (error) {
+      console.error("경매 데이터를 가져오는 중 오류 발생:", error);
     }
   };
 
@@ -30,7 +41,7 @@ function Search() {
     <Container>
       <TitleGroup>
         <img src="/assets/etcpage/Vector.svg" alt="" onClick={goBack} />
-        <h1>상품 등록</h1>
+        <h1>상품 검색</h1>
       </TitleGroup>
 
       <InputGroup>
@@ -38,12 +49,13 @@ function Search() {
         type="text"
         className="search-input"
         placeholder="원하는 물품을 검색해보세요!"
+        onChange={(e) => setKeyword(e.target.value)}
         />
-        <img src="/assets/Search.svg" alt="search" className="search-icon" />
+        <img src="/assets/Search.svg" alt="search" className="search-icon" onClick={fetchSearch}/>
       </InputGroup>
 
       <AuctionItemWrapper>
-        {mockUpcomingAuctions.map((auction) => (
+        {searchData.map((auction) => (
           <SellingItem auction={auction} />
         ))}
       </AuctionItemWrapper>
@@ -58,7 +70,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 72px 30px 20px 30px;
+  padding: 40px 30px 20px 30px;
   font-family: "Pretendard", sans-serif;
   padding-bottom: 180px;
 `;

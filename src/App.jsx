@@ -18,11 +18,10 @@ import { TotalCategory } from "./pages/TotalCategory";
 import ProductDetail from "./pages/ProductDetail";
 import Inspection from "./pages/Inspection";
 import Search from "./pages/Search";
-
-import AuctionProduct from "./pages/AuctionProduct";
-
+import AuctionProduct from "./pages/AuctionProduct"
 import UpcomingDetail from "./pages/UpcomingDetail";
 import DoneDetail from "./pages/DoneDetail";
+import Admin from "./pages/Admin";
 import { Previous } from "./pages/Previous";
 import { SearchBid } from "./pages/SearchBid";
 function App() {
@@ -53,6 +52,7 @@ function App() {
 
             <Route path="/inspection" element={<Inspection />} />
             <Route path="/search" element={<Search />} />
+            <Route path="/admin" element={<Admin />} />
           </Routes>
         </div>
       </Router>

@@ -10,15 +10,15 @@ const SellingItem = ({ auction }) => {
   }
   return (
     <div className="auction-item" onClick={goToDoneDetail}>
-      <img src={auction.img} alt={auction.title} className="auction-item-img" />
+      <img src={auction.imageUrl} alt={auction.productName} className="auction-item-img" />
       <div className="auction-item-details">
         <div className="first_line">
-          <div className="auction-item-category">{auction.category}</div>
+          <div className="auction-item-category">{auction.auctionCategory}</div>
           <img src="/assets/slash.svg" alt="" className="action-item-slash" />
         </div>
-        <h3 className="auction-item-title">{auction.title}</h3>
-        <p className="auction-item-subTitle">{auction.sub}</p> {/* 추가된 부분 */}
-        <p className="auction-item-desc">{auction.desc}</p>
+        <h3 className="auction-item-title">{auction.productName}</h3>
+        <p className="auction-item-subTitle">{auction.screeningStatus}</p> {/* 추가된 부분 */}
+        <p className="auction-item-desc">{auction.productDescription}</p>
         <div className="refresh-icon-container">
           <img
             src="/assets/refresh.svg"
@@ -35,7 +35,7 @@ const SellingItem = ({ auction }) => {
           <p className="auction-item-info">
             현재 {auction.currentBidderCount}명 입찰중
           </p>
-          <p className="auction-item-price">{auction.price}원</p>
+          <p className="auction-item-price">{auction.desiredStartPrice}원</p>
         </div>
       </div>
     </div>

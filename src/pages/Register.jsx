@@ -33,12 +33,10 @@ function Register() {
       console.log("access Token :",accessToken);
     
       const response = await axios.post(`https://ecomarket-cuk.shop/members/info`, {
-        body:{
-          "name":name,
-          "nickname":nickname,
-          "zipcode":zipcode,
-          "address":address
-        }
+      name,
+      nickname,
+      zipcode,
+      address
       }, {
         headers: {
           "Content-Type": "*/*",
