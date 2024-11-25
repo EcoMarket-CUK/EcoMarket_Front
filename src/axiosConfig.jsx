@@ -3,7 +3,7 @@ import axios from "axios";
 
 // Axios 기본 설정
 const instance = axios.create({
-  baseURL: "http://15.165.136.72:8080", // 실제 서버 URL 사용
+  baseURL: "https://ecomarket-cuk.shop", // 실제 서버 URL 사용
 });
 
 // 요청 인터셉터 설정
