@@ -20,6 +20,7 @@ import Inspection from "./pages/Inspection";
 import Search from "./pages/Search";
 import UpcomingDetail from "./pages/UpcomingDetail";
 import DoneDetail from "./pages/DoneDetail";
+import Admin from "./pages/Admin";
 function App() {
   return (
     <Provider store={store}>
@@ -40,6 +41,7 @@ function App() {
             <Route path="/done/:productId" element={<DoneDetail/>} />
             <Route path="/inspection" element={<Inspection />} />
             <Route path="/search" element={<Search />} />
+            <Route path="/admin" element={<Admin />} />
           </Routes>
         </div>
       </Router>
