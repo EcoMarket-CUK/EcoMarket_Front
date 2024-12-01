@@ -6,8 +6,9 @@ const TopBar = ({ text }) => {
   const navigate = useNavigate();
 
   const handleImageClick = () => {
-    navigate('/');
+    navigate(-1); // 이전 페이지로 이동
   };
+  
 
   return (
     <div className="topbar-container">

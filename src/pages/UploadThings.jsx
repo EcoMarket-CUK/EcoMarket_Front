@@ -228,7 +228,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 72px 30px 20px 30px;
+  padding: 40px 30px 20px 30px;
   font-family: "Pretendard", sans-serif;
   padding-bottom: 180px;
 `;

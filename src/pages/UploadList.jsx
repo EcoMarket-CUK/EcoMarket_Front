@@ -69,12 +69,12 @@ function UploadList() {
             <CircleWrapper>🎁</CircleWrapper>
             <StepDescription>상품 등록</StepDescription>
           </StepWrapper>
-          <ArrowIcon>{">"}</ArrowIcon>
+          <ArrowIcon><img src="/assets/guideArrow.svg" alt="가이드 화살표"/></ArrowIcon>
           <StepWrapper>
             <CircleWrapper>✅</CircleWrapper>
             <StepDescription>에코마켓 검수</StepDescription>
           </StepWrapper>
-          <ArrowIcon>{">"}</ArrowIcon>
+          <ArrowIcon><img src="/assets/guideArrow.svg" alt="가이드 화살표"/></ArrowIcon>
           <StepWrapper>
             <CircleWrapper>💵</CircleWrapper>
             <StepDescription>경매 시작</StepDescription>
@@ -85,10 +85,14 @@ function UploadList() {
 
       <SubmitButton onClick={goToInspection}>
         검수 중인 상품 보러가기
-        <img src="/assets/etcpage/slash.svg" alt="" />
       </SubmitButton>
 
       <label className="sectionTitle">경매중인 내 상품</label>
+      {!onGoing&&
+      <EmptyAuction>
+        경매 중인 물품이 없어요!
+      </EmptyAuction>
+      }
       {onGoing&&
         <AuctionItemWrapper>
         {onGoing.map((auction) => (
@@ -98,6 +102,11 @@ function UploadList() {
       }
 
       <label className="sectionTitle two">경매 완료된 내 상품</label>
+      {!ended&&
+      <EmptyAuction>
+        경매 중인 물품이 없어요!
+      </EmptyAuction>
+      }
       {ended&&
         <AuctionItemWrapper>
         {ended.map((auction) => (
@@ -121,7 +130,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 84px 30px 20px 30px;
+  padding: 40px 30px 20px 30px;
   font-family: "Pretendard", sans-serif;
   padding-bottom: 180px; /* 하단에 추가 공간을 확보하여 스크롤 가능하도록 설정 */
   .sectionTitle {
@@ -130,10 +139,10 @@ const Container = styled.div`
     font-family: "Pretendard";
     font-size: 17px;
     font-weight: bold;
-    margin: 36px 0px 20px 0px;
+    margin-bottom:20px;
   }
   .two {
-    margin-top: 20px !important;
+    /* margin-top: 20px !important; */
   }
 `;
 
@@ -142,7 +151,7 @@ const TitleGroup = styled.div`
   width: 100%;
   display: flex;
   justify-content: bottom;
-  margin-bottom:10px;
+  margin-bottom:20px;
   img {
     size: 25px;
     transform: scaleX(-1);
@@ -238,6 +247,21 @@ const ArrowIcon = styled.span`
   margin-bottom:30px;
 `;
 
+const EmptyAuction = styled.div`
+  width: 100%;
+  display: flex;
+  background-color: #ffffff;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-bottom: 30px;
+  justify-content:center;
+  align-items:center;
+  font-size:17px;
+  font-weight:var(--weight-semi-bold);
+  height: 74px;
+`
+
 const AuctionItemWrapper = styled.div`
   display: flex;
   width: 100%;
@@ -255,8 +279,12 @@ const SubmitButton = styled.button`
   font-family: "Pretendard";
   font-size: 20px;
   font-weight: var(--weight-bold);
+  text-align:center;
+  display:flex;
+  justify-content:center;
   cursor: not-allowed;
   margin-top: 8px;
+  margin-bottom:36px; 
   transition: background-color 0.3s ease, color 0.3s ease;
 `;
 
