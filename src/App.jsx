@@ -24,6 +24,7 @@ import DoneDetail from "./pages/DoneDetail";
 import Admin from "./pages/Admin";
 import { Previous } from "./pages/Previous";
 import { SearchBid } from "./pages/SearchBid";
+import EditProfile from "./pages/EditProfile";
 function App() {
   return (
     <Provider store={store}>
@@ -53,6 +54,7 @@ function App() {
             <Route path="/inspection" element={<Inspection />} />
             <Route path="/search" element={<Search />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/edit" element={<EditProfile />} />
           </Routes>
         </div>
       </Router>

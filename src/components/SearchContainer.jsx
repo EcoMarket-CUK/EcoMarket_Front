@@ -1,9 +1,14 @@
 import React from 'react';
 import "../css/components/SearchContainer.css";
+import { useNavigate } from 'react-router-dom';
 
 const SearchBar = () => {
+  const navigate = useNavigate();
+  const goToSearch=()=>{
+    navigate("/search");
+  }
   return (
-    <div className="search-container">
+    <div className="search-container" onClick={goToSearch}>
       <input
         type="text"
         className="search-input"
