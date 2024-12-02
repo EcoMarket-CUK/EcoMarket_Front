@@ -1,20 +1,34 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 
 import { useNavigate } from "react-router-dom"; // useNavigate import 추가
 import styled from "styled-components";
 import "../css/pages/Profile.css";
 import AuctionItem from "../components/AuctionItem";
-import mockAuctionData from "../data/mockAuctionData";
+import { getCategoryDisplayName } from "../utils/categoryMapping";
+
+import axios from "axios"; // Import Axios for HTTP requests
 function Profile() {
 
+  const handleLogout = () => {
+    // Clear specific cookies
+    document.cookie = "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    document.cookie = "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    document.cookie = "memberId=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    
+    // Optionally navigate to login or home page
+    navigate("/login");
+  };
+
+  
   const navigate = useNavigate(); // useNavigate 훅 사용
-  const auctions = mockAuctionData;
-  const steps = [
+  
+  const [auctions, setAuctions] = useState([]);
+  const [steps, setSteps] = useState([
     { icon: "/assets/check-payment.svg", label: "송금 확인", count: 0 },
-    { icon: "/assets/prepare-delivery.svg", label: "배송 준비중", count: 1 },
-    { icon: "/assets/delivering.svg", label: "배송중", count: 2 },
-    { icon: "/assets/delivery-completed.svg", label: "배송 완료", count: 0 }, // New step
-  ];
+    { icon: "/assets/prepare-delivery.svg", label: "배송 준비중", count: 0 },
+    { icon: "/assets/delivering.svg", label: "배송중", count: 0 },
+    { icon: "/assets/delivery-completed.svg", label: "배송 완료", count: 0 },
+  ]);
   
 
   const mockUserInfo = {
@@ -29,6 +43,92 @@ function Profile() {
   const handleSearch= () => {
     navigate("/search-bids"); // 원하는 경로로 이동
   };
+  useEffect(() => {
+    const fetchShippingCounts = async () => {
+      try {
+        const accessToken = document.cookie
+          .split("; ")
+          .find((row) => row.startsWith("accessToken="))
+          ?.split("=")[1];
+
+        if (!accessToken) {
+          alert("로그인이 필요합니다.");
+          navigate("/login");
+          return;
+        }
+
+        const response = await axios.get("https://ecomarket-cuk.shop/shipping/count", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        const data = response.data.result;
+        setSteps((prevSteps) =>
+          prevSteps.map((step) => {
+            switch (step.label) {
+              case "송금 확인":
+                return { ...step, count: data.paymentConfirmedCount };
+              case "배송 준비중":
+                return { ...step, count: data.shippingPreparingCount };
+              case "배송중":
+                return { ...step, count: data.shippingCount };
+              case "배송 완료":
+                return { ...step, count: data.deliveredCount };
+              default:
+                return step;
+            }
+          })
+        );
+      } catch (error) {
+        console.error("Failed to fetch shipping counts:", error);
+        alert("배송 정보 로드에 실패했습니다.");
+      }
+    };
+
+    fetchShippingCounts();
+  }, [navigate]);
+  useEffect(() => {
+    const fetchParticipatedAuctions = async () => {
+      try {
+        const accessToken = document.cookie
+          .split("; ")
+          .find((row) => row.startsWith("accessToken="))
+          ?.split("=")[1];
+
+        if (!accessToken) {
+          alert("로그인이 필요합니다.");
+          navigate("/login");
+          return;
+        }
+
+        // API 요청
+        const response = await axios.get("https://ecomarket-cuk.shop/auctions/participation", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          params: {
+            auctionStatus: "ONGOING", // 쿼리 파라미터 설정
+          },
+        });
+        
+        console.log(response);
+        const data = response.data.result;
+
+        // 데이터 처리
+        const formattedAuctions = data.map((auction) => ({
+          ...auction,
+          auctionCategory: getCategoryDisplayName(auction.auctionCategory), // 카테고리 한글 변환
+          imageUrl: "/assets/picture1.svg", // 고정된 이미지 사용
+        }));
+
+        setAuctions(formattedAuctions); // 변환된 데이터를 상태에 저장
+      } catch (error) {
+        console.error("입찰 중인 경매 데이터를 가져오는 중 오류 발생:", error);
+      }
+    };
+
+    fetchParticipatedAuctions();
+  }, [navigate]);
   return (
     <div className="co">
       <Container>
@@ -36,7 +136,7 @@ function Profile() {
           <h1>마이페이지</h1>
         </TitleGroup>
         <InfoCard>
-          <div className="info-body">
+          <div className="info-body" onClick={() => navigate("/profile/edit")}>
             <div className="info-row">
               <span className="info-label">이름 (닉네임)</span>
               <span className="info-value">{mockUserInfo.name}</span>
@@ -111,7 +211,7 @@ function Profile() {
       <Divider />
       {/* 로그아웃 및 회원탈퇴 섹션 */}
       <AccountSection>
-        <AccountItem>로그아웃</AccountItem>
+        <AccountItem onClick={handleLogout}>로그아웃</AccountItem>
         <AccountItem>회원탈퇴</AccountItem>
       </AccountSection>
     </div>

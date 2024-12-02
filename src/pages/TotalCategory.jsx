@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import TopBar from '../components/TopBar';
 import AuctionItem from '../components/AuctionItem';
+import { getCategoryDisplayName} from '../utils/categoryMapping';
 
 const categoryMapping = {
   "그림": "PAINTING",
@@ -29,13 +30,21 @@ export const TotalCategory = () => {
     const fetchAuctions = async () => {
       try {
         const response = await axios.get(`https://ecomarket-cuk.shop/auctions/ongoing`, {
-          params: { category: mappedCategory }
+          params: { category: mappedCategory },
         });
-        setAuctions(response.data.result); // 가져온 데이터를 state에 저장
+    
+        // 데이터 처리: auctionCategory만 변환
+        const updatedAuctions = response.data.result.map((auction) => ({
+          ...auction,
+          auctionCategory: getCategoryDisplayName(auction.auctionCategory), // 카테고리 한글로 변환
+        }));
+    
+        setAuctions(updatedAuctions); // 변환된 데이터 저장
       } catch (error) {
         console.error("경매 데이터를 가져오는 중 오류 발생:", error);
       }
     };
+    
 
     // fetch 함수 호출
     fetchAuctions();

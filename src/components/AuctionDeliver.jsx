@@ -1,30 +1,25 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import "../css/components/AuctionItem.css"; // 새로운 CSS 파일 import
+import React from 'react';
+import "../css/components/AuctionItem.css";
 
-const AuctionDeliver= ({ auction }) => {
-  const navigate = useNavigate();
-  
-
- 
+const AuctionDeliver = ({ auction }) => {
   return (
-    <div className="auction-item">
-      <img src={auction.imageUrl} alt={auction.productName} className="auction-item-img" />
+    <div className="auction-items">
+      <img src={auction.imageUrl} alt={auction.productName} className="auction-item-imgs" />
       <div className="auction-item-details">
         <div className="first_line">
-            <div className="auction-item-category">
+          <div className="auction-item-category">
             {auction.auctionCategory}
+          </div>
+          <div className="delivery-status">
+            {auction.shippingStatus}
           </div>
         </div>
         <h3 className="auction-item-title">{auction.productName}</h3>
-        <p className="auction-item-desc">{auction.productDescription}</p>
-          
+        <div className="auction-item-info-containers">
+          <p className="auction-item-desc">{auction.productDescription}</p>
+          <p className="auction-item-prices">{auction.finalBidPrice}원</p>
         </div>
-        <div className="auction-item-info-container">
-          
-          <p className="auction-item-price">{auction.currentPrice}원</p>
-        </div>
-
+      </div>
     </div>
   );
 };
