@@ -85,7 +85,7 @@ const Auction = () => {
       // 데이터 처리 및 이미지 고정
       const formattedData = response.data.result.map((auction) => ({
         ...auction,
-        imageUrl: "/assets/picture2.svg", // 고정 이미지 설정
+        // imageUrl: "/assets/picture2.svg", // 고정 이미지 설정
         auctionCategory: reverseCategoryMapping[auction.auctionCategory] || auction.auctionCategory,
       }));
 
@@ -110,7 +110,7 @@ const Auction = () => {
       // 데이터 처리 및 이미지 고정
       const formattedData = response.data.result.map((auction) => ({
         ...auction,
-        imageUrl: "/assets/picture1.svg", // 고정 이미지 설정
+        // imageUrl: "/assets/picture1.svg", // 고정 이미지 설정
         auctionCategory: reverseCategoryMapping[auction.auctionCategory] || auction.auctionCategory,
       }));
 

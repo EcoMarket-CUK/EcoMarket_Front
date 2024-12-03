@@ -123,7 +123,7 @@ function Profile() {
         const formattedAuctions = data.map((auction) => ({
           ...auction,
           auctionCategory: getCategoryDisplayName(auction.auctionCategory), // 카테고리 한글 변환
-          imageUrl: "/assets/picture1.svg", // 고정된 이미지 사용
+          // imageUrl: "/assets/picture1.svg", // 고정된 이미지 사용
         }));
 
         setAuctions(formattedAuctions); // 변환된 데이터를 상태에 저장

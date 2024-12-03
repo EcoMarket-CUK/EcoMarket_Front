@@ -33,7 +33,7 @@ export const Previous = () => {
         const formattedAuctions = response.data.result.map((auction) => ({
           ...auction,
           auctionCategory: getCategoryDisplayName(auction.auctionCategory), // 카테고리 한글 변환
-          imageUrl: "/assets/picture1.svg", // 이미지 고정
+          // imageUrl: "/assets/picture1.svg", // 이미지 고정
           status: auction.isSuccessBid ? "낙찰" : "유찰", // 낙찰/유찰 상태 추가
         }));
 
