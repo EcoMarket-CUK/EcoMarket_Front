@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import GetAddress from "../api/GetAddress";
-import TopBar from "../components/TopBar";
+import Cookies from "js-cookie";
+import axios from "axios";
+
 function EditProfile() {
   // 각각의 input 상태를 관리하기 위한 state
   const [name, setName] = useState("");
@@ -21,20 +23,37 @@ function EditProfile() {
   // 페이지 이동 함수
   const goToHome = () => {
     if (isFormComplete()) {
-      navigate("/");
+      fetchRegister().then(navigate("/"));
     }
   };
 
-  return (
+  const fetchRegister = async () => {
+    try {
+      const accessToken = Cookies.get("accessToken");
+      console.log("access Token :",accessToken);
     
+      const response = await axios.put(`https://ecomarket-cuk.shop/members/info`, {
+      name,
+      nickname,
+      zipcode,
+      address
+      }, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}` // accessToken을 헤더에 추가
+        },
+      });
+    
+      console.log(response);
+      // dispatch(setAuctions(response.data)); // Redux에 데이터 저장
+    } catch (error) {
+      console.error("경매 데이터를 가져오는 중 오류 발생:", error);
+    }
+  };
+  return (
     <Container>
-      <LeftContent onClick={() => navigate(-1)}>
-        <img src="/assets/TopBar/slash.svg" alt="Slash Icon" />
-        <span>뒤로가기</span>
-      </LeftContent>
       <TitleGroup>
-        <h1>내 정보 수정</h1>
-        <p>성함 외 변경하고 싶은 닉네임, 주소를 입력해보세요!</p>
+        <h1>사용자 정보 수정</h1>
       </TitleGroup>
 
       <Form>
@@ -105,7 +124,6 @@ export default EditProfile;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  
   align-items: center;
   padding: 65px 20px 20px 20px;
   font-family: "Pretendard", sans-serif;
@@ -257,3 +275,4 @@ const LeftContent = styled.div`
     color: gray;
   }
 `;
+

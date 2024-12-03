@@ -55,6 +55,7 @@ function App() {
             <Route path="/inspection" element={<Inspection />} />
             <Route path="/search" element={<Search />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/edit" element={<EditProfile />} />
           </Routes>
         </div>
       </Router>

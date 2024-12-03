@@ -32,14 +32,14 @@ function Register() {
       const accessToken = Cookies.get("accessToken");
       console.log("access Token :",accessToken);
     
-      const response = await axios.post(`https://ecomarket-cuk.shop/members/info`, {
+      const response = await axios.put(`https://ecomarket-cuk.shop/members/info`, {
       name,
       nickname,
       zipcode,
       address
       }, {
         headers: {
-          "Content-Type": "*/*",
+          "Content-Type": "application/json",
           "Authorization": `Bearer ${accessToken}` // accessToken을 헤더에 추가
         },
       });

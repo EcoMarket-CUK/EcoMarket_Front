@@ -43,6 +43,11 @@ function Profile() {
   const handleSearch= () => {
     navigate("/search-bids"); // 원하는 경로로 이동
   };
+
+  const goToEdit= () => {
+    navigate("/edit");
+  };
+
   useEffect(() => {
     const fetchShippingCounts = async () => {
       try {
@@ -129,6 +134,7 @@ function Profile() {
 
     fetchParticipatedAuctions();
   }, [navigate]);
+
   return (
     <div className="co">
       <Container>
@@ -211,6 +217,7 @@ function Profile() {
       <Divider />
       {/* 로그아웃 및 회원탈퇴 섹션 */}
       <AccountSection>
+        <AccountItem onClick={goToEdit}>내 정보 수정</AccountItem>
         <AccountItem onClick={handleLogout}>로그아웃</AccountItem>
         <AccountItem>회원탈퇴</AccountItem>
       </AccountSection>
