@@ -125,7 +125,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 84px 20px 20px 20px;
+  padding: 65px 20px 20px 20px;
   font-family: "Pretendard", sans-serif;
 `;
 
@@ -257,3 +257,22 @@ const SubmitButton = styled.button`
     cursor: pointer;
   }
 `;
+const LeftContent = styled.div`
+  position: absolute; /* 위치를 절대 좌표로 설정 */
+  top: 15px; /* 상단에서 10px 떨어진 위치 */
+  left: 17px; /* 왼쪽에서 10px 떨어진 위치 */
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  img {
+    width: 20px;
+    height: 20px;
+  }
+    span {
+    font-family: "Pretendard";
+    font-size: 15px;
+    color: gray;
+  }
+`;
+

@@ -38,6 +38,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
             
+            <Route path="/profile/edit" element={<EditProfile />} />
             <Route path="/previous-bids" element={<Previous />} />
             
             <Route path="/search-bids" element={<SearchBid />} />

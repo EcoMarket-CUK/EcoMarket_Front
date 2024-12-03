@@ -6,6 +6,25 @@
     border-radius: 8px;
     margin-bottom: 20px;
   }
+  .auction-items {
+    display: flex;
+    background-color: #ffffff;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  .delivery-status {
+    color: #FF4D4D; /* Red color for text */
+    font-size: 12px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: bold;
+    margin-left: auto; /* Align to the right */
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    margin-top: 10px;
+  }
   
   .auction-item-img {
     width: 100px;
@@ -13,7 +32,12 @@
     object-fit: cover;
     margin-right: 20px;
   }
-  
+  .auction-item-imgs {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    margin-right: 20px;
+  }
   .auction-item-details {
     display: flex;
     flex-direction: column;
@@ -51,8 +75,15 @@
     display: flex;
     align-items: center;
     width: 100%; /* 부모 요소의 너비를 100%로 설정 */
+    
   }
-  
+  .auction-item-info-containers {
+    display: flex;
+    align-items: center;
+    margin-top: 2px;
+    width: 100%; /* 부모 요소의 너비를 100%로 설정 */
+    
+  }
   .auction-item-people-icon {
     width: 11px;
     height: 11px;
@@ -65,13 +96,37 @@
     font-weight: 500;
     
   }
-  
+  .auction-item-infoed {
+    font-size: 12px;
+    margin-top: 20px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 500;
+    
+  }
   .auction-item-price {
     
     font-size: 15px;
     font-family: 'Pretendard', sans-serif;
     font-weight: bold;
     margin-left: auto;
+
+  }
+  .auction-item-prices {
+    
+    font-size: 15px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: bold;
+    margin-left: auto;
+    margin-right: 16px;
+
+  }
+  .auction-item-priced {
+    
+    font-size: 15px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: bold;
+    margin-left: auto;
+    margin-top: 15px;
 
   }
   .refresh-icon-container {
@@ -87,16 +142,15 @@
     margin-right: 4px;
 }
 
-.refresh-icon {
-    width: 14px;
-    height: 14px;
-    object-fit: contain;
-}
-
-/* rotating 클래스가 있을 때만 회전 애니메이션 추가 */
-.rotating {
-    animation: rotate 0.7s linear infinite;
-}
+  .refresh-icon {
+      width: 14px;
+      height: 14px;
+      object-fit: contain;
+  }
+  /* rotating 클래스가 있을 때만 회전 애니메이션 추가 */
+  .rotating {
+      animation: rotate 0.7s linear infinite;
+  }
 
 @keyframes rotate {
     from {
